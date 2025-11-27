@@ -1,7 +1,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const generateCreativeRandom = async (prompt: string, count: number): Promise<string[]> => {
-  const apiKey = process.env.API_KEY;
+  // Safely access process.env to avoid ReferenceError in some browser environments
+  const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
 
   if (!apiKey) {
     console.warn("Gemini API Key is missing from environment variables.");

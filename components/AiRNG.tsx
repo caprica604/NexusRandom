@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { generateCreativeRandom } from '../services/geminiService';
 import { HistoryItem, ToolType } from '../types';
-import { Sparkles, Brain, Loader2 } from 'lucide-react';
+import { Sparkles, Brain, Loader2, Key, AlertCircle } from 'lucide-react';
 
 interface AiRNGProps {
   onGenerate: (item: HistoryItem) => void;
@@ -20,15 +20,23 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
   const [count, setCount] = useState(3);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<string[]>([]);
+  const [missingKey, setMissingKey] = useState(false);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     
     setLoading(true);
     setResults([]);
+    setMissingKey(false);
     
     const data = await generateCreativeRandom(prompt, count);
     
+    if (data.length > 0 && data[0].startsWith("Error: API Key is missing")) {
+      setMissingKey(true);
+      setLoading(false);
+      return;
+    }
+
     setResults(data);
     setLoading(false);
     
@@ -40,6 +48,23 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
         timestamp: Date.now(),
         label: `AI: ${prompt}`
       });
+    }
+  };
+
+  const handleConnectKey = async () => {
+    // Use type assertion to avoid conflict with global AIStudio type
+    const win = window as any;
+    if (win.aistudio) {
+      try {
+        await win.aistudio.openSelectKey();
+        setMissingKey(false);
+        // Automatically try generating again or just alert success
+        alert("API Key connected successfully! You can now generate content.");
+      } catch (e) {
+        console.error("Failed to select key:", e);
+      }
+    } else {
+      alert("Please ensure you have a valid API Key set in your environment variables (API_KEY).");
     }
   };
 
@@ -99,10 +124,26 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
               </button>
             ))}
           </div>
+
+          {missingKey && (
+            <div className="animate-in fade-in slide-in-from-top-2 bg-amber-900/20 border border-amber-500/30 rounded-lg p-4 flex items-start gap-3 mt-4">
+               <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+               <div className="flex-1">
+                 <h4 className="text-sm font-bold text-amber-200">API Key Required</h4>
+                 <p className="text-xs text-amber-200/70 mb-3">To use AI features, you need to connect your Google Gemini API key.</p>
+                 <button 
+                   onClick={handleConnectKey}
+                   className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded flex items-center gap-2 transition-colors"
+                 >
+                   <Key className="w-3 h-3" /> Connect API Key
+                 </button>
+               </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {results.length > 0 && (
+      {results.length > 0 && !results[0].startsWith("Error") && (
         <div className="grid grid-cols-1 gap-3">
           {results.map((r, i) => (
             <div key={i} className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2" style={{animationDelay: `${i * 50}ms`}}>
@@ -111,6 +152,13 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
             </div>
           ))}
         </div>
+      )}
+
+      {results.length > 0 && results[0].startsWith("Error") && !missingKey && (
+         <div className="bg-red-900/20 border border-red-500/30 p-4 rounded-lg text-red-200 text-sm flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            {results[0]}
+         </div>
       )}
     </div>
   );
