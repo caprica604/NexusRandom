@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { generateCreativeRandom } from '../services/geminiService';
 import { HistoryItem, ToolType } from '../types';
-import { Sparkles, Brain, Loader2, Key, AlertCircle } from 'lucide-react';
+import { Sparkles, Brain, Loader2, Key, AlertCircle, Settings2 } from 'lucide-react';
 
 interface AiRNGProps {
   onGenerate: (item: HistoryItem) => void;
@@ -21,6 +21,10 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<string[]>([]);
   const [missingKey, setMissingKey] = useState(false);
+  
+  // Manual Key State
+  const [userApiKey, setUserApiKey] = useState("");
+  const [showKeyInput, setShowKeyInput] = useState(false);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -29,7 +33,7 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
     setResults([]);
     setMissingKey(false);
     
-    const data = await generateCreativeRandom(prompt, count);
+    const data = await generateCreativeRandom(prompt, count, userApiKey);
     
     if (data.length > 0 && data[0].startsWith("Error: API Key is missing")) {
       setMissingKey(true);
@@ -52,34 +56,75 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
   };
 
   const handleConnectKey = async () => {
-    // Use type assertion to avoid conflict with global AIStudio type
     const win = window as any;
     if (win.aistudio) {
       try {
         await win.aistudio.openSelectKey();
         setMissingKey(false);
-        // Automatically try generating again or just alert success
-        alert("API Key connected successfully! You can now generate content.");
+        // Try to verify or just assume connected
+        const key = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : null;
+        if (key) setUserApiKey(key); // optional sync
       } catch (e) {
         console.error("Failed to select key:", e);
       }
     } else {
-      alert("Please ensure you have a valid API Key set in your environment variables (API_KEY).");
+      setShowKeyInput(true);
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border border-indigo-500/30 p-6 rounded-xl">
-        <div className="flex items-start gap-3 mb-4">
-          <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-300">
-             <Brain className="w-6 h-6" />
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-300">
+              <Brain className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">AI Creative Random</h3>
+              <p className="text-sm text-slate-400">Powered by Gemini or OpenAI.</p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white">AI Creative Random</h3>
-            <p className="text-sm text-slate-400">Powered by Gemini. Ask for anything creative that algorithms can't solve easily.</p>
-          </div>
+          <button 
+            onClick={() => setShowKeyInput(!showKeyInput)}
+            className="text-slate-500 hover:text-indigo-400 transition-colors"
+            title="Configure API Key"
+          >
+            <Settings2 className="w-5 h-5" />
+          </button>
         </div>
+
+        {/* API Key Input Section - Shows if missing or toggled */}
+        {(missingKey || showKeyInput) && (
+          <div className="mb-6 animate-in fade-in slide-in-from-top-2 bg-slate-900/50 p-4 rounded-lg border border-slate-700/50">
+             <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">
+               <Key className="w-3 h-3" /> API Configuration
+             </h4>
+             
+             <div className="flex flex-col gap-3">
+               <div className="flex gap-2">
+                 {(window as any).aistudio && (
+                    <button 
+                      onClick={handleConnectKey}
+                      className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded flex items-center gap-2 transition-colors whitespace-nowrap"
+                    >
+                      Connect Gemini
+                    </button>
+                 )}
+                 <input 
+                   type="password" 
+                   value={userApiKey}
+                   onChange={e => setUserApiKey(e.target.value)}
+                   placeholder="Or paste API Key (sk-... or AIza...)"
+                   className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-xs text-white focus:border-indigo-500 outline-none"
+                 />
+               </div>
+               <p className="text-[10px] text-slate-500">
+                 Supports <strong>Google Gemini</strong> and <strong>OpenAI</strong> keys. Keys are not stored.
+               </p>
+             </div>
+          </div>
+        )}
 
         <div className="space-y-4">
           <div>
@@ -124,22 +169,6 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
               </button>
             ))}
           </div>
-
-          {missingKey && (
-            <div className="animate-in fade-in slide-in-from-top-2 bg-amber-900/20 border border-amber-500/30 rounded-lg p-4 flex items-start gap-3 mt-4">
-               <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-               <div className="flex-1">
-                 <h4 className="text-sm font-bold text-amber-200">API Key Required</h4>
-                 <p className="text-xs text-amber-200/70 mb-3">To use AI features, you need to connect your Google Gemini API key.</p>
-                 <button 
-                   onClick={handleConnectKey}
-                   className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded flex items-center gap-2 transition-colors"
-                 >
-                   <Key className="w-3 h-3" /> Connect API Key
-                 </button>
-               </div>
-            </div>
-          )}
         </div>
       </div>
 
