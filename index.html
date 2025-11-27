@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nexus Random</title>
     
-    <!-- Load Tailwind and configure it only after it loads to prevent ReferenceError -->
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configure Tailwind safely -->
     <script>
       window.addEventListener('load', function() {
-        if (typeof tailwind !== 'undefined') {
-          tailwind.config = {
+        // Access via window object to prevent ReferenceError if undefined
+        if (window.tailwind) {
+          window.tailwind.config = {
             theme: {
               extend: {
                 fontFamily: {
@@ -26,6 +29,8 @@
               }
             }
           }
+        } else {
+          console.warn('Tailwind CSS failed to load or is blocked.');
         }
       });
     </script>
@@ -70,7 +75,7 @@
 </head>
   <body>
     <div id="root"></div>
-    <!-- Main Entry Point - Critical for deployment -->
+    <!-- Main Entry Point -->
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
