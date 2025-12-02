@@ -405,6 +405,16 @@ const UtilityTools: React.FC<UtilityToolsProps> = ({ onGenerate }) => {
            </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">List Randomizer & Number Converters</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Our powerful <strong>Utility Tools</strong> help you organize and transform data efficiently. 
+            Use the <strong>List Randomizer</strong> to shuffle names or pick winners from a group. 
+            The comprehensive <strong>Number Converter</strong> translates values between Decimal, Hexadecimal, and Binary formats instantly, complete with <strong>RGB color previews</strong> and Roman numeral conversion for developers and students.
+         </p>
+      </section>
     </div>
   );
 };

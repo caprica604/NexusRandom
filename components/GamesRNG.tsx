@@ -274,6 +274,16 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
         )}
 
       </div>
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">Dice Roller & Coin Flip Simulator</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Play games or make quick decisions with our <strong>Virtual Dice Roller</strong> and <strong>Coin Flip</strong> tools. 
+            Simulate 3D dice rolls for D&D (D4, D8, D12, D20), board games, or statistics. 
+            Need to settle a bet? Our fair <strong>Heads or Tails</strong> flipper and instant <strong>Yes/No Oracle</strong> provide random unbiased results in milliseconds.
+         </p>
+      </section>
     </div>
   );
 };

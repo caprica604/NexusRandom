@@ -421,6 +421,16 @@ const MathRNG: React.FC<MathRNGProps> = ({ onGenerate }) => {
            </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">Math Partition & Primes Generator</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Solve complex numeric problems with our <strong>Math Random Tools</strong>. 
+            Calculate <strong>Integer Partitions</strong> (random numbers summing to a specific target), find numbers with a specific <strong>Digit Sum</strong>, or generate lists of <strong>Prime Numbers</strong> within a custom range. 
+            Perfect for math students, teachers, and puzzle creators needing instant combinatorics and probability solutions.
+         </p>
+      </section>
     </div>
   );
 };

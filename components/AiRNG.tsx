@@ -189,6 +189,16 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
             {results[0]}
          </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">AI Powered Random Generator</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Go beyond simple numbers with our <strong>Smart AI Random Generator</strong>. 
+            Powered by <strong>Google Gemini</strong> and <strong>OpenAI</strong>, this tool understands context to generate creative lists, names, ideas, and concepts.
+            Whether you need "Sci-fi Planet Names", "Blog Post Ideas", or "D&D Encounter Scenarios", our AI delivers unique, context-aware results instantly.
+         </p>
+      </section>
     </div>
   );
 };

@@ -520,6 +520,16 @@ const BasicRNG: React.FC<BasicRNGProps> = ({ onGenerate }) => {
            </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">Online Random Number Generator</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Generate random integers, decimals, and custom numeric ranges instantly with our free <strong>Random Number Generator (RNG)</strong>. 
+            Create lists of unique numbers, sort them, or apply advanced filters like <strong>odd/even only</strong> and custom ratios.
+            Whether you need numbers for raffles, statistical sampling, or PIN codes, our tool offers precise control over <strong>min/max values</strong> and quantity.
+         </p>
+      </section>
     </div>
   );
 };

@@ -182,6 +182,16 @@ const LotteryRNG: React.FC<LotteryRNGProps> = ({ onGenerate }) => {
            </div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
+         <h2 className="text-xl font-bold text-white mb-3">Free Lottery Number Generator & Quick Pick</h2>
+         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Use our free online <strong>Lottery Number Picker</strong> to generate random lucky numbers for your next ticket. 
+            Whether you need a <strong>Quick Pick</strong> for a local draw or a custom set of numbers, our tool uses cryptographically secure randomization to ensure true fairness.
+            Configure your own pools, generate sets for 6/49, Keno, or any other format instantly without tracking.
+         </p>
+      </section>
     </div>
   );
 };
