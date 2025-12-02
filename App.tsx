@@ -243,14 +243,13 @@ const App: React.FC = () => {
 
           {/* SEO Footer Content */}
           <section className="mt-16 text-center border-t border-slate-800/50 pt-8">
-            <h3 className="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wider">About NexusRandom</h3>
-            <p className="text-xs text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              NexusRandom is your ultimate <strong>online utilities</strong> hub, designed for speed and reliability. 
-              Use our robust <strong>random number generator</strong> for data sampling, or try our secure <strong>password generator</strong> to stay safe online. 
-              Feeling lucky? Our <strong>lottery picker</strong> site help to pick lucky lottery numbers.
-              We also offer fun <strong>decision making tools</strong> like a 3D <strong>dice roller</strong>, instant <strong>coin flip</strong>, and <strong>yes or no generator</strong>. 
-              For students and developers, explore our <strong>math tools</strong> for prime numbers and partitions, or our versatile <strong>unit converter</strong>. 
-              NexusRandom provides the best free, mobile-friendly <strong>random tools</strong> on the web.
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Free Random Generators & Online Utility Tools</h2>
+            <p className="text-sm md:text-base text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              NexusRandom offers fast, simple and free tools including random number 
+              generator, lottery number picker, dice roller, coin flip, yes or no generator, 
+              unit converters, math calculators and fun decision-making utilities.
+              Whether you need random results for games, work, study or entertainment,
+              our tools are built to be accurate, easy to use and available instantly online.
             </p>
           </section>
 
