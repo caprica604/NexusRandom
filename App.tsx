@@ -9,7 +9,7 @@ import GamesRNG from './components/GamesRNG';
 import MathRNG from './components/MathRNG';
 import AdUnit from './components/AdUnit';
 import PaymentModal from './components/DonationModal'; // Internally serves as PaymentModal
-import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Crown, Star } from 'lucide-react';
+import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Crown, Star, Copy } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ToolType>(ToolType.BASIC);
@@ -39,6 +39,17 @@ const App: React.FC = () => {
   };
 
   const clearHistory = () => setHistory([]);
+
+  const copyAllHistory = () => {
+    if (history.length === 0) return;
+    const text = history.map(item => {
+      const time = new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      const res = Array.isArray(item.result) ? item.result.join(', ') : item.result;
+      return `${time} - ${item.label}: ${res}`;
+    }).join('\n');
+    navigator.clipboard.writeText(text);
+    // Optional: Visual feedback could be added here
+  };
 
   const handleTabChange = (id: ToolType) => {
     setActiveTab(id);
@@ -178,9 +189,14 @@ const App: React.FC = () => {
                <Clock className="w-3 h-3" /> Recent Activity
              </h4>
              {history.length > 0 && (
-               <button onClick={clearHistory} className="text-slate-600 hover:text-red-400 transition-colors">
-                 <Trash2 className="w-3 h-3" />
-               </button>
+               <div className="flex items-center gap-2">
+                  <button onClick={copyAllHistory} className="text-slate-600 hover:text-indigo-400 transition-colors" title="Copy All">
+                    <Copy className="w-3 h-3" />
+                  </button>
+                  <button onClick={clearHistory} className="text-slate-600 hover:text-red-400 transition-colors" title="Clear">
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+               </div>
              )}
           </div>
           <div className="space-y-2 max-h-32 overflow-y-auto pr-1 custom-scrollbar">
@@ -221,18 +237,36 @@ const App: React.FC = () => {
             </div>
           )}
 
-          <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm">
+          <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm min-h-[400px]">
             {renderActiveTool()}
           </div>
+
+          {/* SEO Footer Content */}
+          <section className="mt-16 text-center border-t border-slate-800/50 pt-8">
+            <h3 className="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wider">About NexusRandom</h3>
+            <p className="text-xs text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              NexusRandom is your ultimate <strong>online utilities</strong> hub, designed for speed and reliability. 
+              Use our robust <strong>random number generator</strong> for data sampling, or try our secure <strong>password generator</strong> to stay safe online. 
+              Feeling lucky? Our <strong>lottery picker</strong> site help to pick lucky lottery numbers.
+              We also offer fun <strong>decision making tools</strong> like a 3D <strong>dice roller</strong>, instant <strong>coin flip</strong>, and <strong>yes or no generator</strong>. 
+              For students and developers, explore our <strong>math tools</strong> for prime numbers and partitions, or our versatile <strong>unit converter</strong>. 
+              NexusRandom provides the best free, mobile-friendly <strong>random tools</strong> on the web.
+            </p>
+          </section>
 
           {/* Mobile History View */}
           <div className="md:hidden mt-10 border-t border-slate-800 pt-8">
              <div className="flex items-center justify-between mb-4">
                <h3 className="text-lg font-bold text-slate-400">Recent History</h3>
                {history.length > 0 && (
-                 <button onClick={clearHistory} className="text-xs text-slate-600 hover:text-red-400 flex items-center gap-1">
-                   <Trash2 className="w-3 h-3" /> Clear
-                 </button>
+                 <div className="flex items-center gap-3">
+                   <button onClick={copyAllHistory} className="text-xs text-slate-600 hover:text-indigo-400 flex items-center gap-1">
+                      <Copy className="w-3 h-3" /> Copy
+                   </button>
+                   <button onClick={clearHistory} className="text-xs text-slate-600 hover:text-red-400 flex items-center gap-1">
+                      <Trash2 className="w-3 h-3" /> Clear
+                   </button>
+                 </div>
                )}
              </div>
              
