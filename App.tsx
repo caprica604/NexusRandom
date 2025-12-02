@@ -230,6 +230,11 @@ const App: React.FC = () => {
             </div>
           </header>
 
+          {/* SEO Intro Paragraph */}
+          <div className="text-center max-w-2xl mx-auto my-6 text-slate-300 text-lg leading-relaxed">
+            NexusRandom is a free online toolkit offering random number generators, lottery pickers, dice rolls, coin flips, yes/no decisions, text utilities, converters, and math tools. Instantly generate results for games, fun, work, coding, probability tests, simulations and more — fast, accurate, and easy to use on any device.
+          </div>
+
           {/* Main Content Ad Banner (Hidden if Premium) */}
           {!isPremium && (
             <div className="mb-8 w-full overflow-hidden">
@@ -240,18 +245,6 @@ const App: React.FC = () => {
           <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm min-h-[400px]">
             {renderActiveTool()}
           </div>
-
-          {/* SEO Footer Content */}
-          <section className="mt-16 text-center border-t border-slate-800/50 pt-8">
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Free Random Generators & Online Utility Tools</h2>
-            <p className="text-sm md:text-base text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              NexusRandom offers fast, simple and free tools including random number 
-              generator, lottery number picker, dice roller, coin flip, yes or no generator, 
-              unit converters, math calculators and fun decision-making utilities.
-              Whether you need random results for games, work, study or entertainment,
-              our tools are built to be accurate, easy to use and available instantly online.
-            </p>
-          </section>
 
           {/* Mobile History View */}
           <div className="md:hidden mt-10 border-t border-slate-800 pt-8">
