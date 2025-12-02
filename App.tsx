@@ -48,7 +48,6 @@ const App: React.FC = () => {
       return `${time} - ${item.label}: ${res}`;
     }).join('\n');
     navigator.clipboard.writeText(text);
-    // Optional: Visual feedback could be added here
   };
 
   const handleTabChange = (id: ToolType) => {
@@ -242,7 +241,8 @@ const App: React.FC = () => {
             </div>
           )}
 
-          <div className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm min-h-[400px]">
+          {/* Tools Grid / Active Tool */}
+          <div id="tools-grid" className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm min-h-[400px]">
             {renderActiveTool()}
           </div>
 
