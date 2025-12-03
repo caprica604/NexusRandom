@@ -1,16 +1,15 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const generateCreativeRandom = async (prompt: string, count: number): Promise<string[]> => {
-  // 1. Determine API Key exclusively from environment variable
+  // The API key must be obtained exclusively from the environment variable process.env.API_KEY
   const apiKey = process.env.API_KEY;
 
   if (!apiKey) {
-    console.warn("API Key is missing.");
-    return ["Error: API Key is missing. Please configure the environment variable."];
+    console.error("API Key is missing. Please add API_KEY to your .env file.");
+    return ["Error: API Key is missing. Please configure API_KEY in your .env file and restart."];
   }
 
   try {
-    // --- GEMINI IMPLEMENTATION ---
     const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
@@ -52,7 +51,7 @@ export const generateCreativeRandom = async (prompt: string, count: number): Pro
       return ["Error: Too many requests or quota exceeded."];
     }
     if (error.message?.includes('401') || error.message?.includes('403') || error.message?.includes('API key')) {
-      return ["Error: Invalid API Key."];
+      return ["Error: Invalid API Key. Check your .env file."];
     }
     
     return [`Error: ${error.message || "Service temporarily unavailable."}`];
