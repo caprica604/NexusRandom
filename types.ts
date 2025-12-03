@@ -1,3 +1,4 @@
+
 export enum ToolType {
   BASIC = 'BASIC',
   UTILITY = 'UTILITY',
@@ -5,7 +6,8 @@ export enum ToolType {
   TECHNICAL = 'TECHNICAL',
   AI = 'AI',
   GAMES = 'GAMES',
-  MATH = 'MATH'
+  MATH = 'MATH',
+  ABOUT = 'ABOUT'
 }
 
 export interface HistoryItem {

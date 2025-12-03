@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ToolType, HistoryItem } from './types';
 import BasicRNG from './components/BasicRNG';
@@ -7,9 +8,10 @@ import TechnicalRNG from './components/TechnicalRNG';
 import AiRNG from './components/AiRNG';
 import GamesRNG from './components/GamesRNG';
 import MathRNG from './components/MathRNG';
+import { AboutUs } from './components/InfoPages';
 import AdUnit from './components/AdUnit';
 import PaymentModal from './components/DonationModal'; // Internally serves as PaymentModal
-import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Crown, Star, Copy } from 'lucide-react';
+import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Crown, Star, Copy, Info } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ToolType>(ToolType.BASIC);
@@ -64,6 +66,7 @@ const App: React.FC = () => {
       case ToolType.AI: return <AiRNG onGenerate={handleGenerate} />;
       case ToolType.GAMES: return <GamesRNG onGenerate={handleGenerate} />;
       case ToolType.MATH: return <MathRNG onGenerate={handleGenerate} />;
+      case ToolType.ABOUT: return <AboutUs />;
       default: return <BasicRNG onGenerate={handleGenerate} />;
     }
   };
@@ -76,6 +79,10 @@ const App: React.FC = () => {
     { id: ToolType.MATH, label: 'Math Features', icon: Calculator, desc: 'Partitions, Primes & Logic' },
     { id: ToolType.TECHNICAL, label: 'Technical', icon: Terminal, desc: 'Colors, Testing & Crypto' },
     { id: ToolType.AI, label: 'Smart AI', icon: Sparkles, desc: 'Contextual random' },
+  ];
+
+  const infoTabs = [
+    { id: ToolType.ABOUT, label: 'About Us', icon: Info, desc: 'Mission & Privacy' },
   ];
 
   return (
@@ -144,6 +151,26 @@ const App: React.FC = () => {
             </button>
           ))}
           
+          <div className="pt-4 mt-2 border-t border-slate-800/50 space-y-2">
+            <div className="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-1">Information</div>
+            {infoTabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all group ${
+                  activeTab === tab.id 
+                  ? 'bg-indigo-600/10 text-indigo-300 border border-indigo-500/20' 
+                  : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
+                }`}
+              >
+                <tab.icon className={`w-4 h-4 flex-shrink-0 ${activeTab === tab.id ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                <div className="text-left overflow-hidden">
+                  <div className="font-medium text-sm truncate">{tab.label}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
           {/* Premium / Support Section */}
           <div className="pt-4 mt-6 border-t border-slate-800/50 px-2">
             {!isPremium ? (
@@ -224,8 +251,12 @@ const App: React.FC = () => {
           
           <header className="mb-6 md:mb-8 flex justify-between items-end">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{tabs.find(t => t.id === activeTab)?.label}</h2>
-              <p className="text-sm md:text-base text-slate-400">{tabs.find(t => t.id === activeTab)?.desc}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                {[...tabs, ...infoTabs].find(t => t.id === activeTab)?.label}
+              </h2>
+              <p className="text-sm md:text-base text-slate-400">
+                {[...tabs, ...infoTabs].find(t => t.id === activeTab)?.desc}
+              </p>
             </div>
           </header>
 
