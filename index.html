@@ -5,61 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
-    <title>NexusRandom – Free Online Random Tools, Generators & Converters</title>
-    <meta name="title" content="NexusRandom – Free Online Random Tools, Generators & Converters">
-    <meta name="description" content="Use NexusRandom for random number generation, coin flips, dice rolls, lottery tools, text utilities, math converters, and decision makers. Fast and free online tools.">
-    <meta name="keywords" content="random number generator, dice roller, coin flip, random picker, lottery number generator, unit converter, random yes or no, random code generator, math tools online, online utilities, free online tools">
-    <meta name="author" content="NexusRandom">
-    <meta name="robots" content="index, follow">
+    <title>NexusRandom – Smart Random Tools for Everyone</title>
+    <meta name="title" content="NexusRandom – Smart Random Tools for Everyone">
+    <meta name="description" content="Generate numbers, text, choices, converters, games — fast, accurate and free. The professional suite for developers, gamers, and creators.">
     
-    <!-- Canonical Link -->
-    <link rel="canonical" href="https://www.nexusrandom.com/" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.nexusrandom.com/">
-    <meta property="og:title" content="NexusRandom – Free Random Tools & Generators">
-    <meta property="og:description" content="Random number generator, dice roll, coin flip, lottery generator, text tools, math utilities & online converters.">
-    <meta property="og:image" content="https://nexusrandom.com/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.nexusrandom.com/">
-    <meta property="twitter:title" content="NexusRandom – Free Random Tools & Generators">
-    <meta property="twitter:description" content="Random number generator, dice roll, coin flip, lottery generator, text tools, math utilities & online converters.">
-    <meta property="twitter:image" content="https://nexusrandom.com/og-image.jpg">
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    [
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "NexusRandom",
-        "url": "https://www.nexusrandom.com/",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://www.nexusrandom.com/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "NexusRandom – Free Online Random Tools, Generators & Converters",
-        "description": "Use NexusRandom for random number generation, coin flips, dice rolls, lottery tools, text utilities, math converters, and decision makers. Fast and free online tools.",
-        "url": "https://www.nexusrandom.com/"
-      }
-    ]
-    </script>
-
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Configure Tailwind safely -->
+    <!-- Configure Tailwind -->
     <script>
       try {
         if (typeof tailwind !== 'undefined') {
@@ -68,39 +29,56 @@
               extend: {
                 fontFamily: {
                   sans: ['Inter', 'sans-serif'],
+                },
+                colors: {
+                  slate: {
+                    850: '#1e293b', 
+                    900: '#0f172a',
+                    950: '#020617',
+                  }
+                },
+                animation: {
+                  'float': 'float 6s ease-in-out infinite',
+                },
+                keyframes: {
+                  float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                  }
                 }
               }
             }
           }
-        } else {
-          console.warn('Tailwind CSS failed to load or is blocked by an extension.');
         }
       } catch (e) {
         console.error('Error configuring Tailwind:', e);
       }
     </script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
       body {
-        background-color: #0f172a;
+        background-color: #020617; /* Slate 950 */
         color: #f8fafc;
       }
-      /* Custom scrollbar for webkit */
+      
+      /* Professional Scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #1e293b; 
+        background: #0f172a; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #475569; 
+        background: #334155; 
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #64748b; 
+        background: #475569; 
+      }
+      
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
       }
     </style>
     <script type="importmap">

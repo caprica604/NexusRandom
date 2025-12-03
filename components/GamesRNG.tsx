@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { getRandomInt } from '../utils/random';
 import { HistoryItem, ToolType } from '../types';
@@ -30,13 +31,11 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
     if (diceSides < 2) return;
 
     setIsRolling(true);
-
-    // If changing count, reset view immediately so we see the right amount of tumbling dice
     if (diceResults.length !== diceCount) {
         setDiceResults(Array(diceCount).fill(1));
     }
 
-    const duration = 800; // ms
+    const duration = 600; // ms
     const intervalTime = 80; // ms
     
     const interval = setInterval(() => {
@@ -93,87 +92,85 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
     });
   };
 
-  // Derived stats for Coin
   const headsCount = coinResults.filter(r => r === 'Heads').length;
   const tailsCount = coinResults.filter(r => r === 'Tails').length;
 
   return (
-    <div className="space-y-6">
-      {/* Sub Navigation */}
-      <div className="flex p-1 bg-slate-900 rounded-lg border border-slate-800">
+    <div className="space-y-8">
+      {/* Professional Tab Switcher */}
+      <div className="flex p-1 bg-slate-900 rounded-lg border border-slate-800 max-w-lg mx-auto">
         <button 
           onClick={() => { setMode('DICE'); setDiceResults([]); }}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'DICE' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'DICE' ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}
         >
           <Dices className="w-4 h-4" /> Dice Roller
         </button>
         <button 
           onClick={() => { setMode('COIN'); setCoinResults([]); }}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'COIN' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'COIN' ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}
         >
           <Coins className="w-4 h-4" /> Coin Flip
         </button>
         <button 
           onClick={() => { setMode('DECISION'); setDecisionResult(null); }}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'DECISION' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-md transition-all ${mode === 'DECISION' ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}
         >
-          <HelpCircle className="w-4 h-4" /> Yes / No
+          <HelpCircle className="w-4 h-4" /> Decision
         </button>
       </div>
 
-      <div className="bg-slate-800/50 p-6 md:p-8 rounded-xl border border-slate-700 min-h-[300px] flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center min-h-[300px]">
         
         {/* DICE SECTION */}
         {mode === 'DICE' && (
-          <div className="w-full max-w-lg space-y-8">
-            <div className="grid grid-cols-4 gap-2">
-               {[4, 6, 8, 10, 12, 20, 48, 100].map(sides => (
+          <div className="w-full max-w-2xl space-y-8">
+            <div className="flex flex-wrap justify-center gap-2">
+               {[4, 6, 8, 10, 12, 20, 100].map(sides => (
                  <button
                    key={sides}
                    onClick={() => setDiceSides(sides)}
                    disabled={isRolling}
-                   className={`py-2 rounded-lg text-sm font-bold border transition-colors ${
-                     diceSides === sides 
-                     ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300' 
-                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                   } ${isRolling ? 'opacity-50 cursor-not-allowed' : ''}`}
+                   className={`
+                     w-12 h-12 rounded-lg font-bold text-sm border transition-all
+                     ${diceSides === sides 
+                       ? 'bg-indigo-600 border-indigo-500 text-white' 
+                       : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                     }
+                   `}
                  >
                    D{sides}
                  </button>
                ))}
             </div>
 
-            <div className="flex items-end gap-4">
-               <div className="flex-1">
-                 <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Number of Dice</label>
-                 <input 
-                   type="number" min="1" max="50"
-                   value={diceCount}
-                   disabled={isRolling}
-                   onChange={e => setDiceCount(Number(e.target.value))}
-                   className="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-white focus:border-indigo-500 outline-none disabled:opacity-50"
-                 />
-               </div>
-               {diceSides === 0 && (
-                 <div className="flex-1">
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Sides</label>
-                    <input type="number" placeholder="Custom" disabled={isRolling} onChange={e => setDiceSides(Number(e.target.value))} className="w-full bg-slate-900 border border-slate-600 rounded px-4 py-3 text-white disabled:opacity-50"/>
+            <div className="flex items-center gap-4 max-w-xs mx-auto bg-slate-900 p-1.5 rounded-lg border border-slate-800">
+                 <button 
+                    onClick={() => setDiceCount(Math.max(1, diceCount - 1))}
+                    className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                 >-</button>
+                 <div className="flex-1 text-center">
+                    <div className="text-[10px] text-slate-500 uppercase font-bold">Count</div>
+                    <div className="text-lg font-bold text-white leading-none">{diceCount}</div>
                  </div>
-               )}
-               <button
+                 <button 
+                    onClick={() => setDiceCount(Math.min(50, diceCount + 1))}
+                    className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                 >+</button>
+            </div>
+
+            <button
                  onClick={handleRollDice}
                  disabled={isRolling}
-                 className={`flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 ${isRolling ? 'opacity-70 cursor-wait' : ''}`}
+                 className={`w-full max-w-xs mx-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2 ${isRolling ? 'opacity-80' : ''}`}
                >
                  <RefreshCcw className={`w-5 h-5 ${isRolling ? 'animate-spin' : ''}`} /> 
-                 {isRolling ? 'Rolling...' : 'Roll'}
-               </button>
-            </div>
+                 {isRolling ? 'Rolling...' : 'Roll Dice'}
+            </button>
 
             {diceResults.length > 0 && (
               <div className="animate-in fade-in zoom-in-95 duration-200">
                 {!isRolling && (
-                  <div className="text-center mb-6 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="text-center mb-6">
                      <span className="text-4xl font-bold text-white block mb-1">
                        {diceResults.reduce((a, b) => a + b, 0)}
                      </span>
@@ -184,10 +181,7 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
                   {diceResults.map((r, i) => (
                     <div 
                       key={i} 
-                      className={`
-                        w-12 h-12 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center text-lg font-mono text-indigo-300 shadow-inner transition-all duration-75
-                        ${isRolling ? 'scale-90 opacity-80 border-indigo-500/50 text-indigo-200' : 'scale-100 opacity-100'}
-                      `}
+                      className="w-12 h-12 bg-slate-800 border border-slate-700 text-indigo-400 rounded-lg flex items-center justify-center text-xl font-bold"
                     >
                       {r}
                     </div>
@@ -201,50 +195,45 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
         {/* COIN SECTION */}
         {mode === 'COIN' && (
           <div className="w-full max-w-md space-y-8 text-center">
-             <div className="flex items-center justify-center gap-4">
-               <div className="text-left">
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Count</label>
-                  <input 
-                    type="number" min="1" max="100"
-                    value={coinCount}
-                    onChange={e => setCoinCount(Number(e.target.value))}
-                    className="w-24 bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-center"
-                  />
-               </div>
-               <button
+             <div className="flex items-center gap-4 max-w-xs mx-auto bg-slate-900 p-1.5 rounded-lg border border-slate-800">
+                 <button 
+                    onClick={() => setCoinCount(Math.max(1, coinCount - 1))}
+                    className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                 >-</button>
+                 <div className="flex-1 text-center">
+                    <div className="text-[10px] text-slate-500 uppercase font-bold">Coins</div>
+                    <div className="text-lg font-bold text-white leading-none">{coinCount}</div>
+                 </div>
+                 <button 
+                    onClick={() => setCoinCount(Math.min(20, coinCount + 1))}
+                    className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                 >+</button>
+            </div>
+
+             <button
                  onClick={handleFlipCoin}
-                 className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg shadow-lg active:scale-95 transition-transform flex items-center gap-2"
+                 className="w-full max-w-xs mx-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2"
                >
-                 <Coins className="w-5 h-5" /> Flip Coin{coinCount > 1 ? 's' : ''}
-               </button>
-             </div>
+                 <Coins className="w-5 h-5" /> Flip Coin
+             </button>
 
              {coinResults.length > 0 && (
                <div className="animate-in fade-in slide-in-from-bottom-2">
-                 
-                 {/* Statistics Display */}
-                 <div className="flex gap-4 justify-center mb-6 text-sm font-bold">
-                    <div className="px-4 py-2 bg-indigo-900/40 border border-indigo-500/30 rounded-lg text-indigo-200 flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>
-                       Heads: {headsCount}
-                    </div>
-                    <div className="px-4 py-2 bg-emerald-900/40 border border-emerald-500/30 rounded-lg text-emerald-200 flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
-                       Tails: {tailsCount}
-                    </div>
+                 <div className="flex gap-4 justify-center mb-6 text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <span>Heads: <span className="text-white">{headsCount}</span></span>
+                    <span>Tails: <span className="text-white">{tailsCount}</span></span>
                  </div>
 
-                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                 <div className="flex flex-wrap justify-center gap-3">
                    {coinResults.map((res, i) => (
-                     <div key={i} className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${res === 'Heads' ? 'bg-indigo-900/20 border-indigo-500/50 hover:bg-indigo-900/30' : 'bg-emerald-900/20 border-emerald-500/50 hover:bg-emerald-900/30'}`}>
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold border-2 shadow-lg ${
-                          res === 'Heads' 
-                          ? 'bg-indigo-600 border-indigo-300 text-white' 
-                          : 'bg-emerald-600 border-emerald-300 text-white'
-                        }`}>
-                          {res === 'Heads' ? 'H' : 'T'}
-                        </div>
-                        <span className="text-sm font-medium text-slate-300">{res}</span>
+                     <div key={i} className={`
+                        w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold border-2 shadow-sm
+                        ${res === 'Heads' 
+                          ? 'bg-indigo-900/50 border-indigo-500 text-indigo-200' 
+                          : 'bg-emerald-900/50 border-emerald-500 text-emerald-200'
+                        }
+                     `}>
+                        {res === 'Heads' ? 'H' : 'T'}
                      </div>
                    ))}
                  </div>
@@ -258,32 +247,26 @@ const GamesRNG: React.FC<GamesRNGProps> = ({ onGenerate }) => {
           <div className="w-full max-w-sm text-center space-y-8">
             <button
                onClick={handleDecision}
-               className="w-full py-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold text-xl rounded-2xl shadow-xl active:scale-95 transition-all"
+               className="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xl rounded-full shadow-lg transition-all"
             >
-               Make a Decision
+               Yes or No?
             </button>
 
             {decisionResult && (
-              <div key={decisionResult} className="animate-in zoom-in-50 duration-300">
-                 <div className={`text-6xl font-black tracking-tighter ${decisionResult === 'YES' ? 'text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]' : 'text-rose-400 drop-shadow-[0_0_15px_rgba(251,113,133,0.5)]'}`}>
+              <div key={decisionResult} className="animate-in zoom-in-95 duration-300">
+                 <div className={`
+                    text-6xl font-black tracking-tight drop-shadow-lg
+                    ${decisionResult === 'YES' ? 'text-emerald-500' : 'text-rose-500'}
+                 `}>
                    {decisionResult}
                  </div>
+                 <div className="text-slate-500 text-sm mt-2 font-medium">Random Decision</div>
               </div>
             )}
           </div>
         )}
 
       </div>
-
-      {/* SEO Content Section */}
-      <section className="mt-12 pt-8 border-t border-slate-800/50 text-center">
-         <h2 className="text-xl font-bold text-white mb-3">Dice Roller & Coin Flip Simulator</h2>
-         <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Play games or make quick decisions with our <strong>Virtual Dice Roller</strong> and <strong>Coin Flip</strong> tools. 
-            Simulate 3D dice rolls for D&D (D4, D8, D12, D20), board games, or statistics. 
-            Need to settle a bet? Our fair <strong>Heads or Tails</strong> flipper and instant <strong>Yes/No Oracle</strong> provide random unbiased results in milliseconds.
-         </p>
-      </section>
     </div>
   );
 };

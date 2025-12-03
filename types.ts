@@ -1,5 +1,6 @@
 
 export enum ToolType {
+  HOME = 'HOME',
   BASIC = 'BASIC',
   UTILITY = 'UTILITY',
   LOTTERY = 'LOTTERY',
