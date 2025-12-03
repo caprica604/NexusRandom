@@ -1,6 +1,6 @@
-declare var process: {
-  env: {
-    API_KEY: string;
+declare namespace NodeJS {
+  interface ProcessEnv {
+    readonly API_KEY: string;
     [key: string]: string | undefined;
   }
 }
