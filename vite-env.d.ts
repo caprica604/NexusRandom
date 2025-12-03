@@ -1,8 +1,9 @@
-/// <reference types="vite/client" />
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    API_KEY: string;
-    [key: string]: string | undefined;
-  }
+interface ImportMetaEnv {
+  // Add other VITE_ variables here if needed
+  // readonly VITE_SOME_VAR: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }

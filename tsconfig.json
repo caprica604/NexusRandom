@@ -5,7 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "@types/node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -21,7 +21,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "components/**/*.tsx", "utils/**/*.ts", "services/**/*.ts", "App.tsx", "index.tsx", "types.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "components/**/*.tsx", "utils/**/*.ts", "services/**/*.ts", "api/**/*.ts", "App.tsx", "index.tsx", "types.ts"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

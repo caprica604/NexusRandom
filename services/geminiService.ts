@@ -1,36 +1,34 @@
-import { GoogleGenAI, Type } from "@google/genai";
-
+/**
+ * Client-side service that calls the secure Vercel API route.
+ * No API keys are stored here.
+ */
 export const generateCreativeRandom = async (prompt: string, count: number): Promise<string[]> => {
-  // Use process.env.API_KEY as per guidelines
-  const apiKey = process.env.API_KEY;
-
-  if (!apiKey) {
-    console.error("API Key is missing. Please configure API_KEY in your environment.");
-    return ["Error: API Key is missing. Please configure API_KEY and restart."];
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: `Generate a list of ${count} random ${prompt}. Be creative and diverse.`,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.STRING
-          }
-        },
-        systemInstruction: "You are a creative random generator. You output only a strict JSON array of strings based on the user's request. Do not include markdown formatting or explanations.",
-        temperature: 1.2,
-      }
+    // Call the secure backend endpoint
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt, count }),
     });
 
-    const text = response.text;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      
+      if (response.status === 404) {
+        return ["Error: API route not found. Ensure /api/gemini exists and is deployed."];
+      }
+      
+      throw new Error(errorData.error || `Server error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.result;
+
     if (!text) return ["Error: Empty response from AI service."];
-    
+
+    // Parse the JSON string returned by the AI
     let parsed;
     try {
       parsed = JSON.parse(text);
@@ -42,18 +40,11 @@ export const generateCreativeRandom = async (prompt: string, count: number): Pro
     if (Array.isArray(parsed)) {
       return parsed.map(String);
     }
+    
     return ["Error: AI returned unexpected format."];
 
   } catch (error: any) {
-    console.error("AI API Error:", error);
-    
-    if (error.message?.includes('429') || error.message?.includes('quota')) {
-      return ["Error: Too many requests or quota exceeded."];
-    }
-    if (error.message?.includes('401') || error.message?.includes('403') || error.message?.includes('API key')) {
-      return ["Error: Invalid API Key."];
-    }
-    
+    console.error("AI Request Error:", error);
     return [`Error: ${error.message || "Service temporarily unavailable."}`];
   }
 };
