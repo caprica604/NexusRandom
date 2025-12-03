@@ -45,6 +45,7 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Maps ToolType to the specific Component
   const renderActiveTool = () => {
     switch (activeTab) {
       case ToolType.HOME: return <LandingPage onNavigate={handleTabChange} recentHistory={history} />;
@@ -75,12 +76,15 @@ const App: React.FC = () => {
     { id: ToolType.ABOUT, label: 'About', icon: Info, desc: 'Info' },
   ];
 
+  // Helper to get current tab info safely
+  const currentTabInfo = [...tabs, ...infoTabs].find(t => t.id === activeTab) || tabs[0];
+
   return (
     <div className="h-screen w-full bg-slate-950 text-slate-200 flex flex-col md:flex-row font-sans overflow-hidden">
         
       {/* Mobile Header */}
       <header className="md:hidden h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 shrink-0 z-40">
-        <div className="flex items-center gap-2" onClick={() => handleTabChange(ToolType.HOME)}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleTabChange(ToolType.HOME)}>
             <div className="w-8 h-8 rounded bg-indigo-600 flex items-center justify-center">
               <Dice1 className="text-white w-5 h-5" />
             </div>
@@ -167,7 +171,7 @@ const App: React.FC = () => {
             ))}
           </div>
 
-           {/* Sidebar Ad */}
+           {/* Sidebar Ad (Mobile only inside menu) */}
            {!isPremium && sidebarOpen && (
               <div className="mt-4 px-2 md:hidden">
                   <AdUnit format="rectangle" label="Sponsored" className="transform scale-90 origin-center" />
@@ -229,20 +233,23 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-1 h-full overflow-y-auto relative z-0 custom-scrollbar bg-slate-950">
         
+        {/* CONDITIONAL RENDERING: Home vs Tools */}
         {activeTab === ToolType.HOME ? (
+          // Landing Page gets full width/height of the main area
           renderActiveTool()
         ) : (
+          // Tools get a contained layout with headers and ads
           <div className="max-w-6xl mx-auto p-4 md:p-8 lg:p-12 pb-32">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
               <div>
                 <h2 className="text-3xl font-bold text-white mb-2 tracking-tight flex items-center gap-3">
                     <div className={`p-2 rounded-lg bg-slate-800 inline-flex items-center justify-center border border-slate-700`}>
-                      {React.createElement([...tabs, ...infoTabs].find(t => t.id === activeTab)?.icon || Dice1, { className: "w-6 h-6 text-indigo-500" })}
+                      {React.createElement(currentTabInfo.icon, { className: "w-6 h-6 text-indigo-500" })}
                     </div>
-                  {[...tabs, ...infoTabs].find(t => t.id === activeTab)?.label}
+                  {currentTabInfo.label}
                 </h2>
                 <p className="text-slate-400 ml-1">
-                  {[...tabs, ...infoTabs].find(t => t.id === activeTab)?.desc}
+                  {currentTabInfo.desc}
                 </p>
               </div>
               {!isPremium && (
