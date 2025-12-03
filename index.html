@@ -61,10 +61,9 @@
     
     <!-- Configure Tailwind safely -->
     <script>
-      window.addEventListener('load', function() {
-        // Access via window object to prevent ReferenceError if undefined
-        if (window.tailwind) {
-          window.tailwind.config = {
+      try {
+        if (typeof tailwind !== 'undefined') {
+          tailwind.config = {
             theme: {
               extend: {
                 fontFamily: {
@@ -81,9 +80,11 @@
             }
           }
         } else {
-          console.warn('Tailwind CSS failed to load or is blocked.');
+          console.warn('Tailwind CSS failed to load or is blocked by an extension.');
         }
-      });
+      } catch (e) {
+        console.error('Error configuring Tailwind:', e);
+      }
     </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
