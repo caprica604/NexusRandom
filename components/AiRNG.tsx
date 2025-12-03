@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { generateCreativeRandom } from '../services/geminiService';
 import { HistoryItem, ToolType } from '../types';
-import { Sparkles, Brain, Loader2, Key, AlertCircle, Settings2 } from 'lucide-react';
+import { Sparkles, Brain, Loader2, AlertCircle } from 'lucide-react';
 
 interface AiRNGProps {
   onGenerate: (item: HistoryItem) => void;
@@ -20,27 +20,15 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
   const [count, setCount] = useState(3);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<string[]>([]);
-  const [missingKey, setMissingKey] = useState(false);
   
-  // Manual Key State
-  const [userApiKey, setUserApiKey] = useState("");
-  const [showKeyInput, setShowKeyInput] = useState(false);
-
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     
     setLoading(true);
     setResults([]);
-    setMissingKey(false);
     
-    const data = await generateCreativeRandom(prompt, count, userApiKey);
+    const data = await generateCreativeRandom(prompt, count);
     
-    if (data.length > 0 && data[0].startsWith("Error: API Key is missing")) {
-      setMissingKey(true);
-      setLoading(false);
-      return;
-    }
-
     setResults(data);
     setLoading(false);
     
@@ -55,23 +43,6 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
     }
   };
 
-  const handleConnectKey = async () => {
-    const win = window as any;
-    if (win.aistudio) {
-      try {
-        await win.aistudio.openSelectKey();
-        setMissingKey(false);
-        // Try to verify or just assume connected
-        const key = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : null;
-        if (key) setUserApiKey(key); // optional sync
-      } catch (e) {
-        console.error("Failed to select key:", e);
-      }
-    } else {
-      setShowKeyInput(true);
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border border-indigo-500/30 p-6 rounded-xl">
@@ -82,49 +53,10 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">AI Creative Random</h3>
-              <p className="text-sm text-slate-400">Powered by Gemini or OpenAI.</p>
+              <p className="text-sm text-slate-400">Powered by Gemini.</p>
             </div>
           </div>
-          <button 
-            onClick={() => setShowKeyInput(!showKeyInput)}
-            className="text-slate-500 hover:text-indigo-400 transition-colors"
-            title="Configure API Key"
-          >
-            <Settings2 className="w-5 h-5" />
-          </button>
         </div>
-
-        {/* API Key Input Section - Shows if missing or toggled */}
-        {(missingKey || showKeyInput) && (
-          <div className="mb-6 animate-in fade-in slide-in-from-top-2 bg-slate-900/50 p-4 rounded-lg border border-slate-700/50">
-             <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">
-               <Key className="w-3 h-3" /> API Configuration
-             </h4>
-             
-             <div className="flex flex-col gap-3">
-               <div className="flex gap-2">
-                 {(window as any).aistudio && (
-                    <button 
-                      onClick={handleConnectKey}
-                      className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded flex items-center gap-2 transition-colors whitespace-nowrap"
-                    >
-                      Connect Gemini
-                    </button>
-                 )}
-                 <input 
-                   type="password" 
-                   value={userApiKey}
-                   onChange={e => setUserApiKey(e.target.value)}
-                   placeholder="Or paste API Key (sk-... or AIza...)"
-                   className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-xs text-white focus:border-indigo-500 outline-none"
-                 />
-               </div>
-               <p className="text-[10px] text-slate-500">
-                 Supports <strong>Google Gemini</strong> and <strong>OpenAI</strong> keys. Keys are not stored.
-               </p>
-             </div>
-          </div>
-        )}
 
         <div className="space-y-4">
           <div>
@@ -183,7 +115,7 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
         </div>
       )}
 
-      {results.length > 0 && results[0].startsWith("Error") && !missingKey && (
+      {results.length > 0 && results[0].startsWith("Error") && (
          <div className="bg-red-900/20 border border-red-500/30 p-4 rounded-lg text-red-200 text-sm flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />
             {results[0]}
@@ -195,7 +127,7 @@ const AiRNG: React.FC<AiRNGProps> = ({ onGenerate }) => {
          <h2 className="text-xl font-bold text-white mb-3">AI Powered Random Generator</h2>
          <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Go beyond simple numbers with our <strong>Smart AI Random Generator</strong>. 
-            Powered by <strong>Google Gemini</strong> and <strong>OpenAI</strong>, this tool understands context to generate creative lists, names, ideas, and concepts.
+            Powered by <strong>Google Gemini</strong>, this tool understands context to generate creative lists, names, ideas, and concepts.
             Whether you need "Sci-fi Planet Names", "Blog Post Ideas", or "D&D Encounter Scenarios", our AI delivers unique, context-aware results instantly.
          </p>
       </section>
