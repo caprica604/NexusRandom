@@ -55,7 +55,7 @@ export const AboutUs: React.FC = () => {
             <div className="text-center">
               <Heart className="w-8 h-8 text-rose-400 mx-auto mb-3" />
               <h4 className="font-bold text-white mb-1">Free to Use</h4>
-              <p className="text-sm text-slate-500">Core features are completely free. Premium supports us.</p>
+              <p className="text-sm text-slate-500">All features are completely free for everyone.</p>
             </div>
             <div className="text-center">
               <Github className="w-8 h-8 text-slate-400 mx-auto mb-3" />

@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ToolType, HistoryItem } from './types';
 import BasicRNG from './components/BasicRNG';
 import UtilityTools from './components/ListRNG';
@@ -9,32 +8,12 @@ import AiRNG from './components/AiRNG';
 import GamesRNG from './components/GamesRNG';
 import MathRNG from './components/MathRNG';
 import { AboutUs } from './components/InfoPages';
-import AdUnit from './components/AdUnit';
-import PaymentModal from './components/DonationModal'; // Internally serves as PaymentModal
-import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Crown, Star, Copy, Info } from 'lucide-react';
+import { Dice1, Wrench, Ticket, Terminal, Sparkles, Clock, Trash2, ArrowRight, Gamepad2, Calculator, Menu, X, Copy, Info } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ToolType>(ToolType.BASIC);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
-  // Premium State
-  const [isPremium, setIsPremium] = useState(false);
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
-
-  useEffect(() => {
-    const premiumStatus = localStorage.getItem('nexus_premium');
-    if (premiumStatus === 'true') {
-      setIsPremium(true);
-    }
-  }, []);
-
-  const activatePremium = () => {
-    setIsPremium(true);
-    localStorage.setItem('nexus_premium', 'true');
-    setPaymentModalOpen(false);
-    alert("Premium activated! Thank you for your support.");
-  };
 
   const handleGenerate = (item: HistoryItem) => {
     setHistory(prev => [item, ...prev].slice(0, 50));
@@ -91,13 +70,12 @@ const App: React.FC = () => {
       {/* Mobile Header */}
       <header className="md:hidden h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 shrink-0 z-40 relative">
         <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isPremium ? 'bg-amber-500' : 'bg-indigo-600'}`}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-600">
               <Dice1 className="text-white w-5 h-5" />
             </div>
             <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-              Nexus<span className={`font-light ${isPremium ? 'text-amber-400' : 'text-indigo-400'}`}>Random</span>
+              Nexus<span className="font-light text-indigo-400">Random</span>
             </h1>
-            {isPremium && <Crown className="w-4 h-4 text-amber-500 ml-1" />}
         </div>
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)} 
@@ -118,14 +96,13 @@ const App: React.FC = () => {
         {/* Desktop Logo Area */}
         <div className="hidden md:flex p-6 border-b border-slate-800 items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-lg ${isPremium ? 'bg-gradient-to-br from-amber-400 to-orange-600' : 'bg-indigo-600'}`}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg bg-indigo-600">
               <Dice1 className="text-white w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 leading-none">
-                Nexus<span className={`font-light ${isPremium ? 'text-amber-400' : 'text-indigo-400'}`}>Random</span>
+                Nexus<span className="font-light text-indigo-400">Random</span>
               </h1>
-              {isPremium && <span className="text-[10px] text-amber-500 font-bold tracking-widest uppercase">Premium</span>}
             </div>
           </div>
         </div>
@@ -170,42 +147,6 @@ const App: React.FC = () => {
               </button>
             ))}
           </div>
-
-          {/* Premium / Support Section */}
-          <div className="pt-4 mt-6 border-t border-slate-800/50 px-2">
-            {!isPremium ? (
-              <>
-                <div className="text-xs font-bold text-slate-500 uppercase px-2 mb-3">Upgrade</div>
-                <button 
-                  onClick={() => setPaymentModalOpen(true)}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white transition-all shadow-lg shadow-orange-900/20 group border border-white/10"
-                >
-                  <Crown className="w-5 h-5 fill-white/20 group-hover:fill-white/40 transition-colors shrink-0" />
-                  <div className="text-left overflow-hidden">
-                    <div className="font-bold text-sm truncate">Go Premium</div>
-                    <div className="text-[10px] opacity-90 font-light truncate">Remove Ads • $2.00</div>
-                  </div>
-                </button>
-              </>
-            ) : (
-                <div className="p-4 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-amber-500/20 flex items-center gap-3">
-                  <div className="p-2 bg-amber-500/10 rounded-full">
-                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                  </div>
-                  <div>
-                      <div className="text-sm font-bold text-white">Premium Active</div>
-                      <div className="text-[10px] text-slate-400">Thanks for supporting!</div>
-                  </div>
-                </div>
-            )}
-          </div>
-
-          {/* Sidebar Ad Unit (Hidden if Premium) */}
-          {!isPremium && (
-            <div className="pt-4 mt-6 border-t border-slate-800/50 space-y-4 px-2 flex justify-center">
-              <AdUnit format="rectangle" className="opacity-80 scale-90" />
-            </div>
-          )}
         </nav>
         
         {/* Desktop History Widget */}
@@ -265,13 +206,6 @@ const App: React.FC = () => {
             NexusRandom is a free online toolkit offering random number generators, lottery pickers, dice rolls, coin flips, yes/no decisions, text utilities, converters, and math tools. Instantly generate results for games, fun, work, coding, probability tests, simulations and more — fast, accurate, and easy to use on any device.
           </div>
 
-          {/* Main Content Ad Banner (Hidden if Premium) */}
-          {!isPremium && (
-            <div className="mb-8 w-full overflow-hidden">
-              <AdUnit format="horizontal" />
-            </div>
-          )}
-
           {/* Tools Grid Placeholder & Active Tool */}
           <div id="tools-grid" className="bg-slate-900/50 rounded-2xl border border-slate-800 p-4 md:p-8 shadow-2xl backdrop-blur-sm min-h-[400px]">
             {renderActiveTool()}
@@ -314,13 +248,6 @@ const App: React.FC = () => {
 
         </div>
       </main>
-      
-      {/* Payment Gateway Modal */}
-      <PaymentModal 
-        isOpen={paymentModalOpen} 
-        onClose={() => setPaymentModalOpen(false)} 
-        onSuccess={activatePremium}
-      />
     </div>
   );
 };
